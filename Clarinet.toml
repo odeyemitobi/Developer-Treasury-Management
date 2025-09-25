@@ -5,8 +5,8 @@ authors = []
 telemetry = true
 cache_dir = "./.cache"
 
-# [contracts.counter]
-# path = "contracts/counter.clar"
+[contracts.treasury-core]
+path = "contracts/treasury-core.clar"
 
 [repl.analysis]
 passes = ["check_checker"]
