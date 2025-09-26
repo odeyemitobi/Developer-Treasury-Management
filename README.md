@@ -2,7 +2,7 @@
 
 A comprehensive treasury management solution for developer teams, DAOs, and organizations built on the Stacks blockchain. This project combines concepts from LearnWeb3's Stacks Developer Degree courses to create a practical, real-world treasury management system.
 
-## 🎯 Problem Statement
+## Problem Statement
 
 Developer teams (DAOs, startups, open-source projects) need a secure, automated way to:
 
@@ -11,13 +11,14 @@ Developer teams (DAOs, startups, open-source projects) need a secure, automated 
 - **Earn yield** on idle treasury funds through DeFi integration
 - **Handle emergencies** with flash loan capabilities for liquidity
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 The system is designed with modularity in mind, starting with a core treasury contract that can be extended with additional functionality:
 
 ### Core Contract: `treasury-core.clar`
 
 **Current Implementation:**
+
 - ✅ Multi-signature wallet functionality
 - ✅ Role-based member management (Admin, Member, Viewer)
 - ✅ Proposal-based governance system
@@ -26,38 +27,43 @@ The system is designed with modularity in mind, starting with a core treasury co
 - ✅ Time-based proposal expiration
 
 **Future Extensions (Planned):**
+
 - 🔄 Payment scheduling and vesting (`payment-scheduler.clar`)
 - 🔄 DeFi yield strategies (`yield-strategy.clar`)
 - 🔄 Flash loan emergency access (`emergency-access.clar`)
 - 🔄 SIP-010 token support
 
-## 🚀 Features
+## Features
 
 ### Multi-Signature Security
+
 - Configurable approval thresholds (e.g., 2 of 3, 3 of 5)
 - Role-based access control
 - Proposal-based decision making
 - Time-locked proposals with expiration
 
 ### Member Management
+
 - Add/remove members through governance
 - Role assignment (Admin, Member, Viewer)
 - Member activity tracking
 - Proposal voting rights
 
 ### Treasury Operations
+
 - STX transfers with multi-sig approval
 - Proposal creation and voting
 - Execution after sufficient approvals
 - Balance tracking and validation
 
 ### Governance System
+
 - Proposal types: Transfer, Add Member, Remove Member, Change Threshold
 - Voting mechanism with approval tracking
 - Automatic execution after threshold met
 - Proposal expiration for security
 
-## 🛠️ Technical Implementation
+## Technical Implementation
 
 ### Smart Contract Structure
 
@@ -83,9 +89,10 @@ The system is designed with modularity in mind, starting with a core treasury co
 - **Balance Validation**: Checks before allowing transfers
 - **Vote Validation**: Prevents double voting
 
-## 📋 Usage Examples
+## Usage Examples
 
 ### 1. Initialize Treasury
+
 ```clarity
 (contract-call? .treasury-core initialize
   "Dev Team Treasury"
@@ -94,6 +101,7 @@ The system is designed with modularity in mind, starting with a core treasury co
 ```
 
 ### 2. Propose STX Transfer
+
 ```clarity
 (contract-call? .treasury-core propose-stx-transfer
   'SP5678...RECIPIENT
@@ -102,6 +110,7 @@ The system is designed with modularity in mind, starting with a core treasury co
 ```
 
 ### 3. Vote on Proposal
+
 ```clarity
 (contract-call? .treasury-core vote-on-proposal
   u1    ;; proposal ID
@@ -109,11 +118,12 @@ The system is designed with modularity in mind, starting with a core treasury co
 ```
 
 ### 4. Execute Approved Proposal
+
 ```clarity
 (contract-call? .treasury-core execute-transfer-proposal u1)
 ```
 
-## 🧪 Testing
+## Testing
 
 The project includes comprehensive TypeScript tests using Clarinet:
 
@@ -123,6 +133,7 @@ npm test
 ```
 
 Test coverage includes:
+
 - Contract initialization
 - Member management
 - Proposal creation and voting
@@ -130,37 +141,42 @@ Test coverage includes:
 - Access control
 - Error handling
 
-## 🔧 Development Setup
+## Development Setup
 
 ### Prerequisites
+
 - [Clarinet](https://docs.hiro.so/clarinet) installed
 - Node.js and npm for testing
 
 ### Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/odeyemitobi/Developer-Treasury-Management.git
    cd Developer-Treasury-Management
    ```
 
 2. **Verify contract syntax**
+
    ```bash
    clarinet check
    ```
 
 3. **Run tests**
+
    ```bash
    npm install
    npm test
    ```
 
 4. **Deploy locally**
+
    ```bash
    clarinet integrate
    ```
 
-## 🎓 Learning Inspiration
+## Learning Inspiration
 
 This project synthesizes concepts from LearnWeb3's Stacks Developer Degree:
 
@@ -168,33 +184,37 @@ This project synthesizes concepts from LearnWeb3's Stacks Developer Degree:
 2. **Flash Loans**: Emergency liquidity mechanisms (planned)
 3. **Lending Protocol**: DeFi yield strategies (planned)
 
-## 🚀 Roadmap
+## Roadmap
 
 ### Phase 1: Core Treasury ✅
+
 - [x] Multi-signature wallet
 - [x] Member management
 - [x] Basic governance
 - [x] STX transfers
 
 ### Phase 2: Payment Automation 🔄
+
 - [ ] Scheduled payments
 - [ ] Vesting schedules
 - [ ] Bounty system
 - [ ] SIP-010 token support
 
 ### Phase 3: DeFi Integration 🔄
+
 - [ ] Yield farming strategies
 - [ ] Lending protocol integration
 - [ ] Automated rebalancing
 - [ ] Risk management
 
 ### Phase 4: Emergency Features 🔄
+
 - [ ] Flash loan integration
 - [ ] Emergency pause mechanisms
 - [ ] Arbitrage opportunities
 - [ ] Advanced governance
 
-## 🤝 Contributing
+## Contributing
 
 This project is designed to be a foundation for real-world treasury management. Contributions are welcome!
 
@@ -204,11 +224,11 @@ This project is designed to be a foundation for real-world treasury management. 
 4. Ensure `clarinet check` passes
 5. Submit a pull request
 
-## 📄 License
+## License
 
 MIT License - see LICENSE file for details
 
-## 🔗 Links
+## Links
 
 - [GitHub Repository](https://github.com/odeyemitobi/Developer-Treasury-Management)
 - [LearnWeb3 Stacks Course](https://learnweb3.io/degrees/stacks-developer-degree/)
