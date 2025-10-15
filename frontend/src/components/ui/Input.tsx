@@ -12,26 +12,27 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label className="block text-xs sm:text-sm font-semibold text-white mb-1.5 sm:mb-2">
             {label}
           </label>
         )}
         <input
           ref={ref}
           className={cn(
-            'w-full px-4 py-2 bg-gray-900 border rounded-lg text-white placeholder-gray-500',
-            'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+            'w-full px-3 py-2 sm:px-4 sm:py-3 bg-[#0a0a0a] border rounded-lg sm:rounded-xl text-sm sm:text-base text-white placeholder-neutral-500',
+            'focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50',
             'disabled:opacity-50 disabled:cursor-not-allowed',
-            error ? 'border-red-500' : 'border-gray-700',
+            'transition-all duration-200',
+            error ? 'border-red-500/50' : 'border-[#262626] hover:border-[#404040]',
             className
           )}
           {...props}
         />
         {error && (
-          <p className="mt-1 text-sm text-red-500">{error}</p>
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-red-400">{error}</p>
         )}
         {helperText && !error && (
-          <p className="mt-1 text-sm text-gray-400">{helperText}</p>
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-neutral-400">{helperText}</p>
         )}
       </div>
     );

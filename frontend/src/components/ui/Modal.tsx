@@ -32,33 +32,36 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black bg-opacity-75 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/80 backdrop-blur-md"
         onClick={onClose}
       />
-      
+
       {/* Modal */}
       <div className={cn(
-        'relative bg-gray-800 border border-gray-700 rounded-lg shadow-2xl w-full',
+        'relative bg-[#0a0a0a] border border-[#1a1a1a] rounded-2xl shadow-2xl w-full',
+        'animate-in zoom-in-95 duration-200',
         sizes[size]
       )}>
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
-            <h2 className="text-xl font-semibold text-white">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-5 border-b border-[#1a1a1a] bg-[#0a0a0a]/50">
+            <h2 className="text-2xl font-bold text-white tracking-tight">{title}</h2>
             <button
+              type="button"
               onClick={onClose}
-              className="text-gray-400 hover:text-white transition-colors"
+              className="p-2 text-neutral-400 hover:text-white hover:bg-[#1a1a1a] rounded-lg transition-all duration-200"
+              aria-label="Close modal"
             >
               <MdClose size={24} />
             </button>
           </div>
         )}
-        
+
         {/* Content */}
-        <div className="px-6 py-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+        <div className="px-6 py-6 max-h-[calc(100vh-200px)] overflow-y-auto custom-scrollbar">
           {children}
         </div>
       </div>

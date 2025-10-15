@@ -3,9 +3,11 @@ import { cn } from '@/lib/utils';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
+  fullWidth?: boolean;
+  iconPosition?: 'left' | 'right';
 }
 
 export function Button({
@@ -13,24 +15,26 @@ export function Button({
   variant = 'primary',
   size = 'md',
   isLoading = false,
+  fullWidth = false,
   className,
   disabled,
   ...props
 }: ButtonProps) {
-  const baseStyles = 'font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2';
-  
+  const baseStyles = 'font-semibold rounded-lg sm:rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 active:scale-95 relative overflow-hidden';
+
   const variants = {
-    primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg',
-    secondary: 'bg-gray-700 hover:bg-gray-600 text-white shadow-md hover:shadow-lg',
-    danger: 'bg-red-600 hover:bg-red-700 text-white shadow-md hover:shadow-lg',
-    success: 'bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg',
-    ghost: 'bg-transparent hover:bg-gray-700 text-gray-300 hover:text-white',
+    primary: 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg hover:shadow-blue-500/50 border border-blue-500/20 hover:border-blue-400/30',
+    secondary: 'bg-[#1a1a1a] hover:bg-[#262626] text-white shadow-lg hover:shadow-neutral-500/20 border border-[#262626] hover:border-[#404040]',
+    danger: 'bg-red-600 hover:bg-red-500 text-white shadow-lg hover:shadow-red-500/50 border border-red-500/20 hover:border-red-400/30',
+    success: 'bg-green-600 hover:bg-green-500 text-white shadow-lg hover:shadow-green-500/50 border border-green-500/20 hover:border-green-400/30',
+    ghost: 'bg-transparent hover:bg-[#1a1a1a] text-neutral-300 hover:text-white border border-transparent hover:border-[#262626]',
+    outline: 'bg-transparent hover:bg-[#0a0a0a] text-white border-2 border-[#2a2a2a] hover:border-blue-500/50',
   };
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg',
+    sm: 'px-3 py-1.5 text-xs sm:px-4 sm:py-2 sm:text-sm',
+    md: 'px-4 py-2 text-sm sm:px-5 sm:py-2.5 sm:text-base',
+    lg: 'px-5 py-2.5 text-base sm:px-7 sm:py-3.5 sm:text-lg',
   };
 
   return (
@@ -39,6 +43,7 @@ export function Button({
         baseStyles,
         variants[variant],
         sizes[size],
+        fullWidth && 'w-full',
         className
       )}
       disabled={disabled || isLoading}

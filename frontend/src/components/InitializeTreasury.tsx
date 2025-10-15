@@ -77,8 +77,8 @@ export default function InitializeTreasury() {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to initialize treasury');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to initialize treasury');
       setIsLoading(false);
       console.error('Error initializing treasury:', err);
     }
@@ -95,112 +95,127 @@ export default function InitializeTreasury() {
 
   if (success) {
     return (
-      <Card
-        title="Treasury Initialized! 🎉"
-        subtitle="Your treasury has been successfully initialized"
-      >
-        <div className="space-y-4">
-          <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-            <p className="text-green-400 text-sm">
-              The transaction has been submitted to the blockchain. It may take a few moments to be confirmed.
-            </p>
-          </div>
-          
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-400">Treasury Name:</span>
-              <span className="text-white font-medium">{formData.treasuryName}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">Approval Threshold:</span>
-              <span className="text-white font-medium">{formData.threshold}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-gray-400">Founding Member:</span>
-              <span className="text-white font-mono text-xs">{formData.foundingMember}</span>
-            </div>
-          </div>
+      <div className="relative group">
+        {/* Animated gradient border */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-green-600 to-blue-600 rounded-2xl opacity-30 blur-xl animate-pulse"></div>
 
-          <Button
-            onClick={() => window.location.reload()}
-            variant="primary"
-            className="w-full"
-          >
-            Refresh Page
-          </Button>
-        </div>
-      </Card>
+        <Card
+          title="🎉 Treasury Initialized!"
+          subtitle="Your treasury has been successfully initialized"
+          className="relative"
+        >
+          <div className="space-y-6">
+            <div className="p-5 bg-gradient-to-br from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-xl backdrop-blur-sm shadow-lg shadow-green-500/10">
+              <p className="text-green-300 text-sm sm:text-base leading-relaxed">
+                ✅ <strong className="font-bold">Success!</strong> The transaction has been submitted to the blockchain. It may take a few moments to be confirmed.
+              </p>
+            </div>
+
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between items-center p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a] hover:border-blue-500/30 transition-all duration-300">
+                <span className="text-neutral-400 font-medium">Treasury Name:</span>
+                <span className="text-white font-bold">{formData.treasuryName}</span>
+              </div>
+              <div className="flex justify-between items-center p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a] hover:border-blue-500/30 transition-all duration-300">
+                <span className="text-neutral-400 font-medium">Approval Threshold:</span>
+                <span className="text-white font-bold">{formData.threshold}</span>
+              </div>
+              <div className="flex justify-between items-center p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a] hover:border-blue-500/30 transition-all duration-300">
+                <span className="text-neutral-400 font-medium">Founding Member:</span>
+                <span className="text-white font-mono text-xs">{formData.foundingMember}</span>
+              </div>
+            </div>
+
+            <Button
+              onClick={() => window.location.reload()}
+              variant="primary"
+              className="w-full shadow-xl hover:shadow-blue-500/50"
+            >
+              <MdRocketLaunch size={20} />
+              Refresh Page
+            </Button>
+          </div>
+        </Card>
+      </div>
     );
   }
 
   return (
-    <Card
-      title="Initialize Treasury"
-      subtitle="Set up your treasury with initial configuration"
-    >
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          label="Treasury Name"
-          name="treasuryName"
-          value={formData.treasuryName}
-          onChange={handleChange}
-          placeholder="e.g., Developer Treasury"
-          required
-          helperText="A descriptive name for your treasury"
-        />
+    <div className="relative group">
+      {/* Animated gradient border */}
+      <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-30 blur-xl transition-all duration-300"></div>
 
-        <Input
-          label="Approval Threshold"
-          name="threshold"
-          type="number"
-          min="1"
-          value={formData.threshold}
-          onChange={handleChange}
-          placeholder="e.g., 2"
-          required
-          helperText="Number of approvals required to execute proposals"
-        />
+      <Card
+        title="Initialize Treasury"
+        subtitle="Set up your treasury with initial configuration"
+        className="relative"
+      >
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <Input
+            label="Treasury Name"
+            name="treasuryName"
+            value={formData.treasuryName}
+            onChange={handleChange}
+            placeholder="e.g., Developer Treasury"
+            required
+            helperText="A descriptive name for your treasury"
+          />
 
-        <Input
-          label="Founding Member Address"
-          name="foundingMember"
-          value={formData.foundingMember}
-          onChange={handleChange}
-          placeholder="ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM"
-          required
-          helperText="Stacks address of the first admin member"
-        />
+          <Input
+            label="Approval Threshold"
+            name="threshold"
+            type="number"
+            min="1"
+            value={formData.threshold}
+            onChange={handleChange}
+            placeholder="e.g., 2"
+            required
+            helperText="Number of approvals required to execute proposals"
+          />
 
-        {error && (
-          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-            <p className="text-red-400 text-sm">{error}</p>
+          <Input
+            label="Founding Member Address"
+            name="foundingMember"
+            value={formData.foundingMember}
+            onChange={handleChange}
+            placeholder="ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM"
+            required
+            helperText="Stacks address of the first admin member"
+          />
+
+          {error && (
+            <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl backdrop-blur-sm shadow-lg shadow-red-500/10">
+              <p className="text-red-300 text-sm leading-relaxed">
+                <strong className="font-bold">❌ Error:</strong> {error}
+              </p>
+            </div>
+          )}
+
+          <div className="p-5 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-xl backdrop-blur-sm">
+            <p className="text-blue-300 text-sm leading-relaxed">
+              <strong className="font-bold">💡 Important:</strong> The treasury can only be initialized once. Make sure all details are correct before submitting.
+            </p>
           </div>
-        )}
 
-        <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-          <p className="text-blue-400 text-sm">
-            <strong>Note:</strong> The treasury can only be initialized once. Make sure all details are correct before submitting.
-          </p>
-        </div>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={!isConnected || isLoading}
+            isLoading={isLoading}
+            className="w-full shadow-xl hover:shadow-blue-500/50"
+          >
+            <MdRocketLaunch size={20} />
+            Initialize Treasury
+          </Button>
 
-        <Button
-          type="submit"
-          variant="primary"
-          disabled={!isConnected || isLoading}
-          isLoading={isLoading}
-          className="w-full"
-        >
-          <MdRocketLaunch className="mr-2" />
-          Initialize Treasury
-        </Button>
-
-        {!isConnected && (
-          <p className="text-sm text-gray-400 text-center">
-            Please connect your wallet to initialize the treasury
-          </p>
-        )}
-      </form>
-    </Card>
+          {!isConnected && (
+            <p className="text-sm text-neutral-400 text-center">
+              Please connect your wallet to initialize the treasury
+            </p>
+          )}
+        </form>
+      </Card>
+    </div>
   );
 }
 

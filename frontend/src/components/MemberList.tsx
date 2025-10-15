@@ -4,9 +4,11 @@ import { useMemberInfo } from '@/hooks/useTreasury';
 import { useWallet } from '@/hooks/useWallet';
 import { Card } from './ui/Card';
 import { Badge } from './ui/Badge';
+import { Spinner } from './ui/Spinner';
+import { EmptyState } from './ui/EmptyState';
 import { getRoleName, getRoleColor } from '@/types/treasury';
 import { shortenAddress } from '@/lib/utils';
-import { MdPerson, MdVerifiedUser } from 'react-icons/md';
+import { MdPerson, MdVerifiedUser, MdCheckCircle, MdShield, MdVisibility, MdGroups } from 'react-icons/md';
 
 export function MemberList() {
   const { address } = useWallet();
@@ -14,19 +16,24 @@ export function MemberList() {
 
   if (!address) {
     return (
-      <Card title="Your Membership">
-        <div className="text-center py-8">
-          <p className="text-gray-400">Connect your wallet to view membership status</p>
-        </div>
+      <Card title="Your Membership" subtitle="Connect to view your treasury role" variant="elevated">
+        <EmptyState
+          icon={<MdPerson size={56} />}
+          title="Wallet not connected"
+          description="Connect your wallet to view membership status"
+        />
       </Card>
     );
   }
 
   if (isLoading) {
     return (
-      <Card title="Your Membership">
-        <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+      <Card title="Your Membership" variant="elevated">
+        <div className="flex items-center justify-center py-16">
+          <div className="text-center space-y-4">
+            <Spinner size="lg" />
+            <p className="text-neutral-400 text-sm">Loading membership...</p>
+          </div>
         </div>
       </Card>
     );
@@ -34,92 +41,152 @@ export function MemberList() {
 
   if (error) {
     return (
-      <Card title="Your Membership">
-        <div className="text-center py-8">
-          <p className="text-red-400">{error}</p>
-        </div>
+      <Card title="Your Membership" variant="elevated">
+        <EmptyState
+          icon={<MdPerson size={56} />}
+          title="Error loading membership"
+          description={error}
+        />
       </Card>
     );
   }
 
   if (!memberInfo) {
     return (
-      <Card title="Your Membership">
-        <div className="text-center py-8 bg-gray-900 rounded-lg border border-gray-700">
-          <MdPerson size={48} className="mx-auto text-gray-600 mb-4" />
-          <p className="text-gray-400 mb-2">You are not a member of this treasury</p>
-          <p className="text-sm text-gray-500">
-            Contact an admin to request membership
-          </p>
+      <Card title="Your Membership" subtitle="Request access to join" variant="elevated">
+        <div className="space-y-6">
+          <EmptyState
+            icon={<MdGroups size={56} />}
+            title="Not a member"
+            description="You are not currently a member of this treasury"
+          />
+
+          <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
+            <p className="text-blue-300 text-sm leading-relaxed">
+              💡 <strong>Want to join?</strong> Contact an existing admin to request membership through a proposal.
+            </p>
+          </div>
         </div>
       </Card>
     );
   }
 
+  // Role-specific icon
+  const getRoleIcon = (role: number) => {
+    if (role === 1) return <MdShield size={28} />;
+    if (role === 2) return <MdVerifiedUser size={28} />;
+    return <MdVisibility size={28} />;
+  };
+
   return (
-    <Card title="Your Membership">
-      <div className="bg-gray-900 rounded-lg border border-gray-700 p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-600 rounded-lg">
-              <MdVerifiedUser size={32} className="text-white" />
+    <Card
+      title="Your Membership"
+      subtitle="Your role and permissions"
+      variant="elevated"
+      className="h-full"
+    >
+      <div className="space-y-6">
+        {/* Member Header with Enhanced Design */}
+        <div className="relative group">
+          {/* Gradient background */}
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl opacity-20 group-hover:opacity-30 blur transition-all duration-300"></div>
+
+          <div className="relative flex items-start gap-4 p-5 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a]">
+            {/* Role Icon */}
+            <div className={`p-4 rounded-xl shadow-2xl bg-gradient-to-br ${
+              memberInfo.role === 1
+                ? 'from-blue-600 to-blue-500 shadow-blue-500/30'
+                : memberInfo.role === 2
+                ? 'from-purple-600 to-purple-500 shadow-purple-500/30'
+                : 'from-amber-600 to-amber-500 shadow-amber-500/30'
+            }`}>
+              <div className="text-white">
+                {getRoleIcon(memberInfo.role)}
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-gray-400">Address</p>
-              <p className="text-lg font-mono text-white">{shortenAddress(address, 6)}</p>
+
+            {/* Member Info */}
+            <div className="flex-1 min-w-0 space-y-2">
+              <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Your Address</p>
+              <p className="text-base sm:text-lg font-mono font-bold text-white truncate">
+                {shortenAddress(address, 6, 6)}
+              </p>
+
+              {/* Role Badge */}
+              <Badge className={`${getRoleColor(memberInfo.role)} shadow-lg`}>
+                <span className="font-bold text-sm">{getRoleName(memberInfo.role)}</span>
+              </Badge>
             </div>
           </div>
-          <Badge className={getRoleColor(memberInfo.role)}>
-            {getRoleName(memberInfo.role)}
-          </Badge>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-700">
-          <div>
-            <p className="text-sm text-gray-400 mb-1">Joined At Block</p>
-            <p className="text-white font-semibold">#{memberInfo.joinedAt.toLocaleString()}</p>
+        {/* Stats Grid - Enhanced */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="group relative p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] border border-[#1a1a1a] rounded-xl hover:border-blue-500/30 transition-all duration-300">
+            <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Joined At</p>
+            <p className="text-xl font-bold text-white">
+              #{memberInfo.joinedAt.toLocaleString()}
+            </p>
+            <p className="text-xs text-neutral-400 mt-1">Block height</p>
           </div>
-          <div>
-            <p className="text-sm text-gray-400 mb-1">Status</p>
-            {memberInfo.isActive ? (
-              <Badge variant="success">Active</Badge>
-            ) : (
-              <Badge variant="danger">Inactive</Badge>
-            )}
+
+          <div className="group relative p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] border border-[#1a1a1a] rounded-xl hover:border-green-500/30 transition-all duration-300">
+            <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Status</p>
+            <div className="flex items-center gap-2">
+              {memberInfo.isActive ? (
+                <>
+                  <MdCheckCircle size={24} className="text-green-400" />
+                  <span className="text-xl font-bold text-green-400">Active</span>
+                </>
+              ) : (
+                <span className="text-xl font-bold text-red-400">Inactive</span>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="mt-6 pt-6 border-t border-gray-700">
-          <p className="text-sm text-gray-400 mb-2">Permissions</p>
-          <div className="space-y-2">
+        {/* Permissions Card - Enhanced */}
+        <div className="relative p-5 bg-gradient-to-br from-[#0a0a0a] to-[#111111] border border-[#1a1a1a] rounded-xl">
+          <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+            <MdCheckCircle size={20} className="text-blue-400" />
+            <span>Your Permissions</span>
+          </h4>
+
+          <div className="space-y-3">
             {memberInfo.role <= 2 && (
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                Can create proposals
-              </div>
+              <>
+                <div className="flex items-center gap-3 text-sm text-neutral-300 group/perm hover:text-white transition-colors">
+                  <div className="w-2 h-2 bg-green-500 rounded-full shadow-lg shadow-green-500/50 group-hover/perm:scale-125 transition-transform"></div>
+                  <span className="font-medium">Create and propose new actions</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-neutral-300 group/perm hover:text-white transition-colors">
+                  <div className="w-2 h-2 bg-green-500 rounded-full shadow-lg shadow-green-500/50 group-hover/perm:scale-125 transition-transform"></div>
+                  <span className="font-medium">Vote on active proposals</span>
+                </div>
+              </>
             )}
-            {memberInfo.role <= 2 && (
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                Can vote on proposals
-              </div>
-            )}
+
             {memberInfo.role === 1 && (
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                Can propose member removal
-              </div>
+              <>
+                <div className="flex items-center gap-3 text-sm text-neutral-300 group/perm hover:text-white transition-colors">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 group-hover/perm:scale-125 transition-transform"></div>
+                  <span className="font-medium">Propose member removal</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-neutral-300 group/perm hover:text-white transition-colors">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 group-hover/perm:scale-125 transition-transform"></div>
+                  <span className="font-medium">Propose threshold changes</span>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-neutral-300 group/perm hover:text-white transition-colors">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 group-hover/perm:scale-125 transition-transform"></div>
+                  <span className="font-medium">Full administrative access</span>
+                </div>
+              </>
             )}
-            {memberInfo.role === 1 && (
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                Can propose threshold changes
-              </div>
-            )}
+
             {memberInfo.role === 3 && (
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
-                View-only access
+              <div className="flex items-center gap-3 text-sm text-neutral-400 group/perm hover:text-neutral-300 transition-colors">
+                <div className="w-2 h-2 bg-neutral-500 rounded-full group-hover/perm:scale-125 transition-transform"></div>
+                <span className="font-medium">View-only access (no voting rights)</span>
               </div>
             )}
           </div>

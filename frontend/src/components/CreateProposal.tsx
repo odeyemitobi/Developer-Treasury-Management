@@ -9,9 +9,11 @@ import { Input } from './ui/Input';
 import { Select } from './ui/Select';
 import { Textarea } from './ui/Textarea';
 import { Modal } from './ui/Modal';
+import { EmptyState } from './ui/EmptyState';
 import { ROLES, PROPOSAL_TYPES } from '@/types/treasury';
 import { stxToMicroStx, isValidStacksAddress } from '@/lib/utils';
-import { MdAdd } from 'react-icons/md';
+import { cn } from '@/lib/utils';
+import { MdAdd, MdSend, MdPersonAdd, MdPersonRemove, MdSettings, MdDescription } from 'react-icons/md';
 
 type ProposalFormType = 'transfer' | 'add-member' | 'remove-member' | 'change-threshold';
 
@@ -127,48 +129,79 @@ export function CreateProposal() {
 
   if (!address) {
     return (
-      <Card title="Create Proposal">
-        <div className="text-center py-8">
-          <p className="text-gray-400">Connect your wallet to create proposals</p>
-        </div>
+      <Card title="Create Proposal" subtitle="Connect to create proposals" variant="elevated">
+        <EmptyState
+          icon={<MdDescription size={56} />}
+          title="Wallet not connected"
+          description="Connect your wallet to create proposals"
+        />
       </Card>
     );
   }
+
+  const proposalTypes = [
+    { type: 'transfer', icon: MdSend, label: 'STX Transfer', color: 'blue', description: 'Send STX from treasury' },
+    { type: 'add-member', icon: MdPersonAdd, label: 'Add Member', color: 'green', description: 'Add new member' },
+    { type: 'remove-member', icon: MdPersonRemove, label: 'Remove Member', color: 'red', description: 'Remove member' },
+    { type: 'change-threshold', icon: MdSettings, label: 'Change Threshold', color: 'amber', description: 'Update threshold' },
+  ];
 
   return (
     <>
       <Card
         title="Create Proposal"
         subtitle="Submit a new proposal for treasury governance"
+        variant="elevated"
         action={
-          <Button onClick={() => setIsModalOpen(true)} variant="primary" size="sm">
+          <Button onClick={() => setIsModalOpen(true)} variant="primary" size="sm" className="shadow-lg hover:shadow-blue-500/30">
             <MdAdd size={20} />
-            New Proposal
+            <span className="hidden sm:inline">New Proposal</span>
+            <span className="sm:hidden">New</span>
           </Button>
         }
       >
-        <div className="text-center py-8 bg-gray-900 rounded-lg border border-gray-700">
-          <p className="text-gray-400 mb-4">
-            Click the button above to create a new proposal
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-400">STX</div>
-              <div className="text-sm text-gray-500">Transfer</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-400">+</div>
-              <div className="text-sm text-gray-500">Add Member</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-red-400">-</div>
-              <div className="text-sm text-gray-500">Remove Member</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-400">#</div>
-              <div className="text-sm text-gray-500">Change Threshold</div>
-            </div>
-          </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {proposalTypes.map(({ type, icon: Icon, label, color, description }) => (
+            <button
+              key={type}
+              type="button"
+              onClick={() => {
+                setProposalType(type as ProposalFormType);
+                setIsModalOpen(true);
+              }}
+              className={cn(
+                'group relative p-4 sm:p-5 rounded-xl border-2 transition-all duration-300',
+                'hover:scale-105 hover:shadow-xl',
+                'bg-gradient-to-br from-[#0a0a0a] to-[#111111] border-[#1a1a1a] hover:border-[#2a2a2a]',
+                'flex flex-col items-center gap-3 text-center'
+              )}
+            >
+              {/* Hover glow effect */}
+              <div className={cn(
+                'absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-xl',
+                color === 'blue' && 'bg-blue-500',
+                color === 'green' && 'bg-green-500',
+                color === 'red' && 'bg-red-500',
+                color === 'amber' && 'bg-amber-500'
+              )}></div>
+
+              <div
+                className={cn(
+                  'relative p-3 sm:p-4 rounded-xl bg-gradient-to-br shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl',
+                  color === 'blue' && 'from-blue-600 to-blue-500 shadow-blue-500/40 group-hover:shadow-blue-500/60',
+                  color === 'green' && 'from-green-600 to-green-500 shadow-green-500/40 group-hover:shadow-green-500/60',
+                  color === 'red' && 'from-red-600 to-red-500 shadow-red-500/40 group-hover:shadow-red-500/60',
+                  color === 'amber' && 'from-amber-600 to-amber-500 shadow-amber-500/40 group-hover:shadow-amber-500/60'
+                )}
+              >
+                <Icon size={28} className="text-white" />
+              </div>
+              <div className="relative space-y-1">
+                <span className="text-sm font-bold text-white block">{label}</span>
+                <span className="text-xs text-neutral-400 block">{description}</span>
+              </div>
+            </button>
+          ))}
         </div>
       </Card>
 
@@ -182,19 +215,42 @@ export function CreateProposal() {
         size="lg"
       >
         <form onSubmit={handleSubmit} className="space-y-6">
-          <Select
-            label="Proposal Type"
-            value={proposalType}
-            onChange={(e) => {
-              setProposalType(e.target.value as ProposalFormType);
-              setErrors({});
-            }}
-          >
-            <option value="transfer">STX Transfer</option>
-            <option value="add-member">Add Member</option>
-            <option value="remove-member">Remove Member</option>
-            <option value="change-threshold">Change Threshold</option>
-          </Select>
+          {/* Proposal Type Selector */}
+          <div>
+            <label className="block text-sm font-semibold text-white mb-3">Proposal Type</label>
+            <div className="grid grid-cols-2 gap-3">
+              {proposalTypes.map(({ type, icon: Icon, label, color }) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => {
+                    setProposalType(type as ProposalFormType);
+                    setErrors({});
+                  }}
+                  className={cn(
+                    'p-4 rounded-xl border-2 transition-all duration-200',
+                    'flex items-center gap-3',
+                    proposalType === type
+                      ? 'border-blue-500 bg-blue-500/10'
+                      : 'border-[#1a1a1a] bg-[#0a0a0a] hover:border-[#2a2a2a]'
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'p-2 rounded-lg',
+                      color === 'blue' && 'bg-blue-600',
+                      color === 'green' && 'bg-green-600',
+                      color === 'red' && 'bg-red-600',
+                      color === 'amber' && 'bg-amber-600'
+                    )}
+                  >
+                    <Icon size={20} className="text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-white">{label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
           {proposalType === 'transfer' && (
             <>
@@ -271,7 +327,7 @@ export function CreateProposal() {
             maxLength={200}
           />
 
-          <div className="flex gap-3 justify-end pt-4">
+          <div className="flex gap-3 justify-end pt-6 border-t border-[#1a1a1a]">
             <Button
               type="button"
               variant="secondary"
@@ -287,13 +343,14 @@ export function CreateProposal() {
               variant="primary"
               isLoading={contractWrite.isLoading}
             >
+              <MdAdd size={18} />
               Create Proposal
             </Button>
           </div>
 
           {contractWrite.error && (
-            <div className="mt-4 p-4 bg-red-900/20 border border-red-700 rounded-lg">
-              <p className="text-red-400 text-sm">{contractWrite.error}</p>
+            <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl backdrop-blur-sm">
+              <p className="text-red-400 text-sm leading-relaxed">❌ {contractWrite.error}</p>
             </div>
           )}
         </form>
