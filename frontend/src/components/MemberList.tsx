@@ -61,8 +61,8 @@ export function MemberList() {
             description="You are not currently a member of this treasury"
           />
 
-          <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-            <p className="text-blue-300 text-sm leading-relaxed">
+          <div className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-xl">
+            <p className="text-orange-300 text-sm leading-relaxed">
               💡 <strong>Want to join?</strong> Contact an existing admin to request membership through a proposal.
             </p>
           </div>
@@ -89,13 +89,13 @@ export function MemberList() {
         {/* Member Header with Enhanced Design */}
         <div className="relative group">
           {/* Gradient background */}
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl opacity-20 group-hover:opacity-30 blur transition-all duration-300"></div>
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-purple-600 rounded-xl opacity-20 group-hover:opacity-30 blur transition-all duration-300"></div>
 
           <div className="relative flex items-start gap-4 p-5 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a]">
             {/* Role Icon */}
             <div className={`p-4 rounded-xl shadow-2xl bg-gradient-to-br ${
               memberInfo.role === 1
-                ? 'from-blue-600 to-blue-500 shadow-blue-500/30'
+                ? 'from-orange-600 to-orange-500 shadow-orange-500/30'
                 : memberInfo.role === 2
                 ? 'from-purple-600 to-purple-500 shadow-purple-500/30'
                 : 'from-amber-600 to-amber-500 shadow-amber-500/30'
@@ -122,7 +122,7 @@ export function MemberList() {
 
         {/* Stats Grid - Enhanced */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="group relative p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] border border-[#1a1a1a] rounded-xl hover:border-blue-500/30 transition-all duration-300">
+          <div className="group relative p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] border border-[#1a1a1a] rounded-xl hover:border-orange-500/30 transition-all duration-300">
             <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Joined At</p>
             <p className="text-xl font-bold text-white">
               #{memberInfo.joinedAt.toLocaleString()}
@@ -148,7 +148,7 @@ export function MemberList() {
         {/* Permissions Card - Enhanced */}
         <div className="relative p-5 bg-gradient-to-br from-[#0a0a0a] to-[#111111] border border-[#1a1a1a] rounded-xl">
           <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
-            <MdCheckCircle size={20} className="text-blue-400" />
+            <MdCheckCircle size={20} className="text-orange-400" />
             <span>Your Permissions</span>
           </h4>
 
@@ -169,15 +169,15 @@ export function MemberList() {
             {memberInfo.role === 1 && (
               <>
                 <div className="flex items-center gap-3 text-sm text-neutral-300 group/perm hover:text-white transition-colors">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 group-hover/perm:scale-125 transition-transform"></div>
+                  <div className="w-2 h-2 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50 group-hover/perm:scale-125 transition-transform"></div>
                   <span className="font-medium">Propose member removal</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-neutral-300 group/perm hover:text-white transition-colors">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 group-hover/perm:scale-125 transition-transform"></div>
+                  <div className="w-2 h-2 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50 group-hover/perm:scale-125 transition-transform"></div>
                   <span className="font-medium">Propose threshold changes</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm text-neutral-300 group/perm hover:text-white transition-colors">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full shadow-lg shadow-blue-500/50 group-hover/perm:scale-125 transition-transform"></div>
+                  <div className="w-2 h-2 bg-orange-500 rounded-full shadow-lg shadow-orange-500/50 group-hover/perm:scale-125 transition-transform"></div>
                   <span className="font-medium">Full administrative access</span>
                 </div>
               </>

@@ -36,9 +36,9 @@ function ProposalCard({ proposal, onVote, onExecute, isLoading }: {
   return (
     <div className="group relative">
       {/* Animated gradient border on hover */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-20 blur transition-all duration-300"></div>
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-20 blur transition-all duration-300"></div>
 
-      <div className="relative bg-gradient-to-br from-[#0a0a0a] to-[#111111] border border-[#1a1a1a] rounded-xl p-5 sm:p-6 hover:border-blue-500/30 transition-all duration-300 shadow-lg hover:shadow-xl">
+      <div className="relative bg-gradient-to-br from-[#0a0a0a] to-[#111111] border border-[#1a1a1a] rounded-xl p-5 sm:p-6 hover:border-orange-500/30 transition-all duration-300 shadow-lg hover:shadow-xl">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-5">
           <div className="flex-1 min-w-0">
@@ -79,23 +79,23 @@ function ProposalCard({ proposal, onVote, onExecute, isLoading }: {
             value={proposal.approvalCount}
             max={threshold}
             label="Approval Progress"
-            color={progressPercentage >= 100 ? 'green' : 'blue'}
+            color={progressPercentage >= 100 ? 'green' : 'orange'}
           />
         </div>
       )}
 
       {/* Details Grid - Enhanced */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-5">
-        <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-4 hover:border-blue-500/20 transition-all duration-300">
+        <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-4 hover:border-orange-500/20 transition-all duration-300">
           <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Proposer</p>
           <p className="text-sm text-white font-mono">{shortenAddress(proposal.proposer, 6)}</p>
         </div>
-        <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-4 hover:border-blue-500/20 transition-all duration-300">
+        <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-4 hover:border-orange-500/20 transition-all duration-300">
           <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Expires At</p>
           <p className="text-sm text-white font-semibold">Block #{proposal.expiresAt.toLocaleString()}</p>
         </div>
         {proposal.target && (
-          <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-4 hover:border-blue-500/20 transition-all duration-300">
+          <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-4 hover:border-orange-500/20 transition-all duration-300">
             <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">Target</p>
             <p className="text-sm text-white font-mono">{shortenAddress(proposal.target, 6)}</p>
           </div>
@@ -143,7 +143,7 @@ function ProposalCard({ proposal, onVote, onExecute, isLoading }: {
               size="sm"
               onClick={() => onExecute(proposal.proposalId, proposal.proposalType)}
               isLoading={isLoading}
-              className="w-full sm:w-auto sm:ml-auto shadow-lg hover:shadow-blue-500/30"
+              className="w-full sm:w-auto sm:ml-auto shadow-lg hover:shadow-orange-500/30"
             >
               <MdPlayArrow size={18} />
               <span>Execute Proposal</span>
@@ -246,8 +246,8 @@ export function ProposalList() {
             title="No proposals yet"
             description="Create the first proposal to get started with treasury governance"
           />
-          <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl">
-            <p className="text-blue-300 text-sm leading-relaxed text-center">
+          <div className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-xl">
+            <p className="text-orange-300 text-sm leading-relaxed text-center">
               💡 <strong>Get started:</strong> Use the "Create Proposal" section to submit your first treasury action
             </p>
           </div>

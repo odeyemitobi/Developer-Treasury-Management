@@ -15,7 +15,7 @@ export function Spinner({ size = 'md', className, color = 'primary' }: SpinnerPr
   };
 
   const colors = {
-    primary: 'border-blue-500 border-t-transparent',
+    primary: 'border-orange-500 border-t-transparent',
     white: 'border-white border-t-transparent',
     success: 'border-green-500 border-t-transparent',
     danger: 'border-red-500 border-t-transparent',

@@ -9,13 +9,13 @@ interface StatCardProps {
     value: string;
     isPositive: boolean;
   };
-  iconColor?: 'blue' | 'purple' | 'green' | 'amber' | 'red' | 'cyan';
+  iconColor?: 'orange' | 'purple' | 'green' | 'amber' | 'red' | 'cyan';
   className?: string;
 }
 
-export function StatCard({ label, value, icon, trend, iconColor = 'blue', className }: StatCardProps) {
+export function StatCard({ label, value, icon, trend, iconColor = 'orange', className }: StatCardProps) {
   const iconColors = {
-    blue: 'from-blue-600 to-blue-500 shadow-blue-500/30',
+    orange: 'from-orange-600 to-orange-500 shadow-orange-500/30',
     purple: 'from-purple-600 to-purple-500 shadow-purple-500/30',
     green: 'from-green-600 to-green-500 shadow-green-500/30',
     amber: 'from-amber-600 to-amber-500 shadow-amber-500/30',

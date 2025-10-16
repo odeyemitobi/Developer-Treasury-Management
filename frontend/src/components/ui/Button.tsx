@@ -23,12 +23,12 @@ export function Button({
   const baseStyles = 'font-semibold rounded-lg sm:rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 sm:gap-2 active:scale-95 relative overflow-hidden';
 
   const variants = {
-    primary: 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg hover:shadow-blue-500/50 border border-blue-500/20 hover:border-blue-400/30',
-    secondary: 'bg-[#1a1a1a] hover:bg-[#262626] text-white shadow-lg hover:shadow-neutral-500/20 border border-[#262626] hover:border-[#404040]',
+    primary: 'bg-orange-600 hover:bg-orange-500 text-white shadow-lg hover:shadow-orange-500/50 border border-orange-500/20 hover:border-orange-400/30',
+    secondary: 'bg-orange-600 hover:bg-orange-500 text-white shadow-lg hover:shadow-orange-500/50 border border-orange-500/20 hover:border-orange-400/30',
     danger: 'bg-red-600 hover:bg-red-500 text-white shadow-lg hover:shadow-red-500/50 border border-red-500/20 hover:border-red-400/30',
     success: 'bg-green-600 hover:bg-green-500 text-white shadow-lg hover:shadow-green-500/50 border border-green-500/20 hover:border-green-400/30',
     ghost: 'bg-transparent hover:bg-[#1a1a1a] text-neutral-300 hover:text-white border border-transparent hover:border-[#262626]',
-    outline: 'bg-transparent hover:bg-[#0a0a0a] text-white border-2 border-[#2a2a2a] hover:border-blue-500/50',
+    outline: 'bg-transparent hover:bg-[#0a0a0a] text-white border-2 border-[#2a2a2a] hover:border-orange-500/50',
   };
 
   const sizes = {

@@ -61,13 +61,13 @@ export function TreasuryOverview() {
       {/* Header Card - Enhanced with gradient */}
       <div className="relative group">
         {/* Animated gradient border effect */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-30 blur transition-all duration-300"></div>
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-30 blur transition-all duration-300"></div>
 
         <Card variant="glass" className="relative bg-gradient-to-br from-[#0a0a0a] to-[#111111]">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="min-w-0 flex-1 space-y-3">
               {/* Treasury Name with gradient text */}
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent truncate">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-orange-100 to-orange-200 bg-clip-text text-transparent truncate">
                 {treasuryInfo.name}
               </h2>
 
@@ -85,7 +85,7 @@ export function TreasuryOverview() {
                 )}
 
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0a0a0a] border border-[#1a1a1a] rounded-lg">
-                  <MdPeople size={16} className="text-blue-400" />
+                  <MdPeople size={16} className="text-orange-400" />
                   <span className="text-sm text-neutral-300 font-medium">
                     {treasuryInfo.memberCount} member{treasuryInfo.memberCount !== 1 ? 's' : ''}
                   </span>
@@ -115,7 +115,7 @@ export function TreasuryOverview() {
             label="Total Balance"
             value={`${formatStx(treasuryInfo.stxBalance, 2)} STX`}
             icon={<MdAccountBalance className="text-white w-7 h-7 sm:w-8 sm:h-8" />}
-            iconColor="blue"
+            iconColor="orange"
             trend={{
               value: '12.5%',
               isPositive: true,

@@ -97,7 +97,7 @@ export default function InitializeTreasury() {
     return (
       <div className="relative group">
         {/* Animated gradient border */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-green-600 to-blue-600 rounded-2xl opacity-30 blur-xl animate-pulse"></div>
+        <div className="absolute -inset-1 bg-gradient-to-r from-green-600 to-orange-600 rounded-2xl opacity-30 blur-xl animate-pulse"></div>
 
         <Card
           title="🎉 Treasury Initialized!"
@@ -105,22 +105,22 @@ export default function InitializeTreasury() {
           className="relative"
         >
           <div className="space-y-6">
-            <div className="p-5 bg-gradient-to-br from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-xl backdrop-blur-sm shadow-lg shadow-green-500/10">
+            <div className="p-5 bg-gradient-to-br from-green-500/10 to-orange-500/10 border border-green-500/30 rounded-xl backdrop-blur-sm shadow-lg shadow-green-500/10">
               <p className="text-green-300 text-sm sm:text-base leading-relaxed">
                 ✅ <strong className="font-bold">Success!</strong> The transaction has been submitted to the blockchain. It may take a few moments to be confirmed.
               </p>
             </div>
 
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a] hover:border-blue-500/30 transition-all duration-300">
+              <div className="flex justify-between items-center p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a] hover:border-orange-500/30 transition-all duration-300">
                 <span className="text-neutral-400 font-medium">Treasury Name:</span>
                 <span className="text-white font-bold">{formData.treasuryName}</span>
               </div>
-              <div className="flex justify-between items-center p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a] hover:border-blue-500/30 transition-all duration-300">
+              <div className="flex justify-between items-center p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a] hover:border-orange-500/30 transition-all duration-300">
                 <span className="text-neutral-400 font-medium">Approval Threshold:</span>
                 <span className="text-white font-bold">{formData.threshold}</span>
               </div>
-              <div className="flex justify-between items-center p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a] hover:border-blue-500/30 transition-all duration-300">
+              <div className="flex justify-between items-center p-4 bg-gradient-to-br from-[#0a0a0a] to-[#111111] rounded-xl border border-[#1a1a1a] hover:border-orange-500/30 transition-all duration-300">
                 <span className="text-neutral-400 font-medium">Founding Member:</span>
                 <span className="text-white font-mono text-xs">{formData.foundingMember}</span>
               </div>
@@ -129,7 +129,7 @@ export default function InitializeTreasury() {
             <Button
               onClick={() => window.location.reload()}
               variant="primary"
-              className="w-full shadow-xl hover:shadow-blue-500/50"
+              className="w-full shadow-xl hover:shadow-orange-500/50"
             >
               <MdRocketLaunch size={20} />
               Refresh Page
@@ -143,7 +143,7 @@ export default function InitializeTreasury() {
   return (
     <div className="relative group">
       {/* Animated gradient border */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-30 blur-xl transition-all duration-300"></div>
+      <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-30 blur-xl transition-all duration-300"></div>
 
       <Card
         title="Initialize Treasury"
@@ -191,8 +191,8 @@ export default function InitializeTreasury() {
             </div>
           )}
 
-          <div className="p-5 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-xl backdrop-blur-sm">
-            <p className="text-blue-300 text-sm leading-relaxed">
+          <div className="p-5 bg-gradient-to-br from-orange-500/10 to-purple-500/10 border border-orange-500/30 rounded-xl backdrop-blur-sm">
+            <p className="text-orange-300 text-sm leading-relaxed">
               <strong className="font-bold">💡 Important:</strong> The treasury can only be initialized once. Make sure all details are correct before submitting.
             </p>
           </div>
@@ -202,7 +202,7 @@ export default function InitializeTreasury() {
             variant="primary"
             disabled={!isConnected || isLoading}
             isLoading={isLoading}
-            className="w-full shadow-xl hover:shadow-blue-500/50"
+            className="w-full shadow-xl hover:shadow-orange-500/50"
           >
             <MdRocketLaunch size={20} />
             Initialize Treasury

@@ -140,7 +140,7 @@ export function CreateProposal() {
   }
 
   const proposalTypes = [
-    { type: 'transfer', icon: MdSend, label: 'STX Transfer', color: 'blue', description: 'Send STX from treasury' },
+    { type: 'transfer', icon: MdSend, label: 'STX Transfer', color: 'orange', description: 'Send STX from treasury' },
     { type: 'add-member', icon: MdPersonAdd, label: 'Add Member', color: 'green', description: 'Add new member' },
     { type: 'remove-member', icon: MdPersonRemove, label: 'Remove Member', color: 'red', description: 'Remove member' },
     { type: 'change-threshold', icon: MdSettings, label: 'Change Threshold', color: 'amber', description: 'Update threshold' },
@@ -153,7 +153,7 @@ export function CreateProposal() {
         subtitle="Submit a new proposal for treasury governance"
         variant="elevated"
         action={
-          <Button onClick={() => setIsModalOpen(true)} variant="primary" size="sm" className="shadow-lg hover:shadow-blue-500/30">
+          <Button onClick={() => setIsModalOpen(true)} variant="primary" size="sm" className="shadow-lg hover:shadow-orange-500/30">
             <MdAdd size={20} />
             <span className="hidden sm:inline">New Proposal</span>
             <span className="sm:hidden">New</span>
@@ -179,7 +179,7 @@ export function CreateProposal() {
               {/* Hover glow effect */}
               <div className={cn(
                 'absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-xl',
-                color === 'blue' && 'bg-blue-500',
+                color === 'orange' && 'bg-orange-500',
                 color === 'green' && 'bg-green-500',
                 color === 'red' && 'bg-red-500',
                 color === 'amber' && 'bg-amber-500'
@@ -188,7 +188,7 @@ export function CreateProposal() {
               <div
                 className={cn(
                   'relative p-3 sm:p-4 rounded-xl bg-gradient-to-br shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl',
-                  color === 'blue' && 'from-blue-600 to-blue-500 shadow-blue-500/40 group-hover:shadow-blue-500/60',
+                  color === 'orange' && 'from-orange-600 to-orange-500 shadow-orange-500/40 group-hover:shadow-orange-500/60',
                   color === 'green' && 'from-green-600 to-green-500 shadow-green-500/40 group-hover:shadow-green-500/60',
                   color === 'red' && 'from-red-600 to-red-500 shadow-red-500/40 group-hover:shadow-red-500/60',
                   color === 'amber' && 'from-amber-600 to-amber-500 shadow-amber-500/40 group-hover:shadow-amber-500/60'
@@ -231,14 +231,14 @@ export function CreateProposal() {
                     'p-4 rounded-xl border-2 transition-all duration-200',
                     'flex items-center gap-3',
                     proposalType === type
-                      ? 'border-blue-500 bg-blue-500/10'
+                      ? 'border-orange-500 bg-orange-500/10'
                       : 'border-[#1a1a1a] bg-[#0a0a0a] hover:border-[#2a2a2a]'
                   )}
                 >
                   <div
                     className={cn(
                       'p-2 rounded-lg',
-                      color === 'blue' && 'bg-blue-600',
+                      color === 'orange' && 'bg-orange-600',
                       color === 'green' && 'bg-green-600',
                       color === 'red' && 'bg-red-600',
                       color === 'amber' && 'bg-amber-600'
