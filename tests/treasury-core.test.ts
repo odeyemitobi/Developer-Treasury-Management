@@ -394,4 +394,469 @@ describe("Treasury Core Contract", () => {
       expect(hasMemberRole.result).toStrictEqual(Cl.bool(true)); // Admin should have member privileges
     });
   });
+
+  describe("Proposal Expiration", () => {
+    beforeEach(() => {
+      simnet.callPublicFn(
+        "treasury-core",
+        "initialize",
+        [
+          Cl.stringAscii("Test Treasury"),
+          Cl.uint(2),
+          Cl.principal(deployerAddress)
+        ],
+        deployerAddress
+      );
+
+      simnet.transferSTX(1000000, `${deployerAddress}.treasury-core`, deployerAddress);
+    });
+
+    it("should not allow voting on expired proposals", () => {
+      // Create a proposal
+      simnet.callPublicFn(
+        "treasury-core",
+        "propose-stx-transfer",
+        [
+          Cl.principal(member3Address),
+          Cl.uint(100000),
+          Cl.stringAscii("Test payment")
+        ],
+        deployerAddress
+      );
+
+      // Mine blocks to expire the proposal (PROPOSAL_DURATION = 1440 blocks)
+      simnet.mineEmptyBlocks(1441);
+
+      // Try to vote on expired proposal - should fail with ERR_PROPOSAL_NOT_FOUND (u104)
+      // because the proposal is no longer valid
+      const voteResult = simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(1), Cl.bool(true)],
+        deployerAddress
+      );
+
+      expect(voteResult.result).toBeErr(Cl.uint(104)); // ERR_PROPOSAL_NOT_FOUND
+    });
+  });
+
+  describe("Double Voting Prevention", () => {
+    beforeEach(() => {
+      simnet.callPublicFn(
+        "treasury-core",
+        "initialize",
+        [
+          Cl.stringAscii("Test Treasury"),
+          Cl.uint(1),
+          Cl.principal(deployerAddress)
+        ],
+        deployerAddress
+      );
+
+      simnet.transferSTX(1000000, `${deployerAddress}.treasury-core`, deployerAddress);
+    });
+
+    it("should prevent double voting on same proposal", () => {
+      // Create a proposal
+      simnet.callPublicFn(
+        "treasury-core",
+        "propose-stx-transfer",
+        [
+          Cl.principal(member3Address),
+          Cl.uint(100000),
+          Cl.stringAscii("Test payment")
+        ],
+        deployerAddress
+      );
+
+      // First vote
+      const firstVote = simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(1), Cl.bool(true)],
+        deployerAddress
+      );
+
+      expect(firstVote.result).toBeOk(Cl.bool(true));
+
+      // Second vote attempt
+      const secondVote = simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(1), Cl.bool(true)],
+        deployerAddress
+      );
+
+      expect(secondVote.result).toBeErr(Cl.uint(106)); // ERR_ALREADY_VOTED
+    });
+  });
+
+  describe("Threshold Management", () => {
+    beforeEach(() => {
+      simnet.callPublicFn(
+        "treasury-core",
+        "initialize",
+        [
+          Cl.stringAscii("Test Treasury"),
+          Cl.uint(1),
+          Cl.principal(deployerAddress)
+        ],
+        deployerAddress
+      );
+
+      // Add another member first so we can increase threshold
+      simnet.callPublicFn(
+        "treasury-core",
+        "propose-add-member",
+        [
+          Cl.principal(member1Address),
+          Cl.uint(2),
+          Cl.stringAscii("Add member")
+        ],
+        deployerAddress
+      );
+
+      simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(1), Cl.bool(true)],
+        deployerAddress
+      );
+
+      simnet.callPublicFn(
+        "treasury-core",
+        "execute-add-member-proposal",
+        [Cl.uint(1)],
+        deployerAddress
+      );
+    });
+
+    it("should allow proposing threshold changes", () => {
+      const proposalResult = simnet.callPublicFn(
+        "treasury-core",
+        "propose-threshold-change",
+        [
+          Cl.uint(2), // Now we have 2 members, so threshold of 2 is valid
+          Cl.stringAscii("Increase approval threshold")
+        ],
+        deployerAddress
+      );
+
+      expect(proposalResult.result).toBeOk(Cl.uint(2));
+    });
+
+    it("should not allow invalid threshold changes", () => {
+      const proposalResult = simnet.callPublicFn(
+        "treasury-core",
+        "propose-threshold-change",
+        [
+          Cl.uint(0), // Below minimum
+          Cl.stringAscii("Invalid threshold")
+        ],
+        deployerAddress
+      );
+
+      expect(proposalResult.result).toBeErr(Cl.uint(103)); // ERR_INVALID_THRESHOLD
+    });
+  });
+
+  describe("Multiple Members and Voting", () => {
+    beforeEach(() => {
+      // Initialize with threshold of 2
+      simnet.callPublicFn(
+        "treasury-core",
+        "initialize",
+        [
+          Cl.stringAscii("Test Treasury"),
+          Cl.uint(2),
+          Cl.principal(deployerAddress)
+        ],
+        deployerAddress
+      );
+
+      // Add member1
+      simnet.callPublicFn(
+        "treasury-core",
+        "propose-add-member",
+        [
+          Cl.principal(member1Address),
+          Cl.uint(2),
+          Cl.stringAscii("Add member 1")
+        ],
+        deployerAddress
+      );
+
+      simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(1), Cl.bool(true)],
+        deployerAddress
+      );
+
+      simnet.callPublicFn(
+        "treasury-core",
+        "execute-add-member-proposal",
+        [Cl.uint(1)],
+        deployerAddress
+      );
+
+      // Add member2
+      simnet.callPublicFn(
+        "treasury-core",
+        "propose-add-member",
+        [
+          Cl.principal(member2Address),
+          Cl.uint(2),
+          Cl.stringAscii("Add member 2")
+        ],
+        deployerAddress
+      );
+
+      simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(2), Cl.bool(true)],
+        deployerAddress
+      );
+
+      simnet.callPublicFn(
+        "treasury-core",
+        "execute-add-member-proposal",
+        [Cl.uint(2)],
+        deployerAddress
+      );
+
+      simnet.transferSTX(1000000, `${deployerAddress}.treasury-core`, deployerAddress);
+    });
+
+    it("should require multiple approvals for execution", () => {
+      // Create transfer proposal
+      simnet.callPublicFn(
+        "treasury-core",
+        "propose-stx-transfer",
+        [
+          Cl.principal(member3Address),
+          Cl.uint(100000),
+          Cl.stringAscii("Test payment")
+        ],
+        deployerAddress
+      );
+
+      // Vote from deployer (1 vote, need 2)
+      simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(3), Cl.bool(true)],
+        deployerAddress
+      );
+
+      // Try to execute with only 1 vote - should fail with insufficient approvals
+      const executeResult = simnet.callPublicFn(
+        "treasury-core",
+        "execute-transfer-proposal",
+        [Cl.uint(3)],
+        deployerAddress
+      );
+
+      expect(executeResult.result).toBeErr(Cl.uint(107)); // ERR_INSUFFICIENT_APPROVALS
+    });
+  });
+
+  describe("Proposal Not Found", () => {
+    beforeEach(() => {
+      simnet.callPublicFn(
+        "treasury-core",
+        "initialize",
+        [
+          Cl.stringAscii("Test Treasury"),
+          Cl.uint(1),
+          Cl.principal(deployerAddress)
+        ],
+        deployerAddress
+      );
+    });
+
+    it("should return error for non-existent proposal", () => {
+      const voteResult = simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(999), Cl.bool(true)],
+        deployerAddress
+      );
+
+      expect(voteResult.result).toBeErr(Cl.uint(104)); // ERR_PROPOSAL_NOT_FOUND
+    });
+  });
+
+  describe("Remove Member Functionality", () => {
+    beforeEach(() => {
+      simnet.callPublicFn(
+        "treasury-core",
+        "initialize",
+        [
+          Cl.stringAscii("Test Treasury"),
+          Cl.uint(1),
+          Cl.principal(deployerAddress)
+        ],
+        deployerAddress
+      );
+
+      // Add a member
+      simnet.callPublicFn(
+        "treasury-core",
+        "propose-add-member",
+        [
+          Cl.principal(member1Address),
+          Cl.uint(2),
+          Cl.stringAscii("Add member")
+        ],
+        deployerAddress
+      );
+
+      simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(1), Cl.bool(true)],
+        deployerAddress
+      );
+
+      simnet.callPublicFn(
+        "treasury-core",
+        "execute-add-member-proposal",
+        [Cl.uint(1)],
+        deployerAddress
+      );
+    });
+
+    it("should allow removing members", () => {
+      const proposalResult = simnet.callPublicFn(
+        "treasury-core",
+        "propose-remove-member",
+        [
+          Cl.principal(member1Address),
+          Cl.stringAscii("Remove member")
+        ],
+        deployerAddress
+      );
+
+      expect(proposalResult.result).toBeOk(Cl.uint(2));
+    });
+
+    it("should not allow removing non-existent members", () => {
+      const proposalResult = simnet.callPublicFn(
+        "treasury-core",
+        "propose-remove-member",
+        [
+          Cl.principal(nonMemberAddress),
+          Cl.stringAscii("Remove non-member")
+        ],
+        deployerAddress
+      );
+
+      expect(proposalResult.result).toBeErr(Cl.uint(102)); // ERR_NOT_MEMBER
+    });
+
+    it("should not allow non-admins to propose member removal", () => {
+      const proposalResult = simnet.callPublicFn(
+        "treasury-core",
+        "propose-remove-member",
+        [
+          Cl.principal(member1Address),
+          Cl.stringAscii("Remove member")
+        ],
+        member1Address // Non-admin trying to remove
+      );
+
+      expect(proposalResult.result).toBeErr(Cl.uint(100)); // ERR_NOT_AUTHORIZED
+    });
+  });
+
+  describe("Invalid Amount Handling", () => {
+    beforeEach(() => {
+      simnet.callPublicFn(
+        "treasury-core",
+        "initialize",
+        [
+          Cl.stringAscii("Test Treasury"),
+          Cl.uint(1),
+          Cl.principal(deployerAddress)
+        ],
+        deployerAddress
+      );
+
+      simnet.transferSTX(1000000, `${deployerAddress}.treasury-core`, deployerAddress);
+    });
+
+    it("should not allow zero amount transfers", () => {
+      const proposalResult = simnet.callPublicFn(
+        "treasury-core",
+        "propose-stx-transfer",
+        [
+          Cl.principal(member3Address),
+          Cl.uint(0),
+          Cl.stringAscii("Zero transfer")
+        ],
+        deployerAddress
+      );
+
+      expect(proposalResult.result).toBeErr(Cl.uint(109)); // ERR_INVALID_AMOUNT
+    });
+  });
+
+  describe("Proposal Already Executed", () => {
+    beforeEach(() => {
+      simnet.callPublicFn(
+        "treasury-core",
+        "initialize",
+        [
+          Cl.stringAscii("Test Treasury"),
+          Cl.uint(1),
+          Cl.principal(deployerAddress)
+        ],
+        deployerAddress
+      );
+
+      simnet.transferSTX(1000000, `${deployerAddress}.treasury-core`, deployerAddress);
+    });
+
+    it("should not allow executing same proposal twice", () => {
+      // Create and execute proposal
+      simnet.callPublicFn(
+        "treasury-core",
+        "propose-stx-transfer",
+        [
+          Cl.principal(member3Address),
+          Cl.uint(100000),
+          Cl.stringAscii("Test payment")
+        ],
+        deployerAddress
+      );
+
+      simnet.callPublicFn(
+        "treasury-core",
+        "vote-on-proposal",
+        [Cl.uint(1), Cl.bool(true)],
+        deployerAddress
+      );
+
+      const firstExecution = simnet.callPublicFn(
+        "treasury-core",
+        "execute-transfer-proposal",
+        [Cl.uint(1)],
+        deployerAddress
+      );
+
+      expect(firstExecution.result).toBeOk(Cl.bool(true));
+
+      // Try to execute again - should fail because proposal is no longer valid (expired)
+      const secondExecution = simnet.callPublicFn(
+        "treasury-core",
+        "execute-transfer-proposal",
+        [Cl.uint(1)],
+        deployerAddress
+      );
+
+      expect(secondExecution.result).toBeErr(Cl.uint(105)); // ERR_PROPOSAL_EXPIRED (proposal is no longer valid after execution)
+    });
+  });
 });

@@ -50,10 +50,10 @@ export async function GET(
     };
 
     return NextResponse.json(proposal);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching proposal:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch proposal' },
+      { error: error instanceof Error ? error.message : 'Failed to fetch proposal' },
       { status: 500 }
     );
   }
