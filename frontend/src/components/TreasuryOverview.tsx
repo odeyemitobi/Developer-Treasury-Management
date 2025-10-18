@@ -7,7 +7,7 @@ import { Badge } from './ui/Badge';
 import { Spinner } from './ui/Spinner';
 import { EmptyState } from './ui/EmptyState';
 import { formatStx } from '@/lib/utils';
-import { MdAccountBalance, MdPeople, MdVerifiedUser, MdRefresh, MdCheckCircle, MdTrendingUp } from 'react-icons/md';
+import { MdAccountBalance, MdPeople, MdVerifiedUser, MdRefresh, MdCheckCircle } from 'react-icons/md';
 import { Button } from './ui/Button';
 
 export function TreasuryOverview() {
@@ -118,8 +118,7 @@ export function TreasuryOverview() {
             iconColor="orange"
             trend={{
               value: '12.5%',
-              isPositive: true,
-              icon: <MdTrendingUp size={16} />
+              isPositive: true
             }}
             className="h-full"
           />
@@ -131,7 +130,6 @@ export function TreasuryOverview() {
           value={treasuryInfo.memberCount}
           icon={<MdPeople className="text-white w-6 h-6 sm:w-7 sm:h-7" />}
           iconColor="purple"
-          description={`${treasuryInfo.memberCount} voting member${treasuryInfo.memberCount !== 1 ? 's' : ''}`}
         />
 
         {/* Approval Threshold */}
@@ -140,7 +138,6 @@ export function TreasuryOverview() {
           value={`${treasuryInfo.threshold}/${treasuryInfo.memberCount}`}
           icon={<MdVerifiedUser className="text-white w-6 h-6 sm:w-7 sm:h-7" />}
           iconColor="green"
-          description={`${treasuryInfo.threshold} approval${treasuryInfo.threshold !== 1 ? 's' : ''} required`}
         />
 
         {/* Treasury Status */}
@@ -149,7 +146,6 @@ export function TreasuryOverview() {
           value={treasuryInfo.isInitialized ? 'Active' : 'Inactive'}
           icon={<MdCheckCircle className="text-white w-6 h-6 sm:w-7 sm:h-7" />}
           iconColor={treasuryInfo.isInitialized ? 'green' : 'amber'}
-          description={treasuryInfo.isInitialized ? 'Fully operational' : 'Awaiting initialization'}
         />
       </div>
     </div>

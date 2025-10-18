@@ -8,7 +8,7 @@ import { ProposalList } from "@/components/ProposalList";
 import InitializeTreasury from "@/components/InitializeTreasury";
 import { useTreasuryInfo } from "@/hooks/useTreasury";
 import Image from "next/image";
-import { MdAccountBalance, MdDashboard, MdHowToVote } from "react-icons/md";
+import { MdDashboard, MdHowToVote } from "react-icons/md";
 import { useState } from "react";
 
 export default function Home() {

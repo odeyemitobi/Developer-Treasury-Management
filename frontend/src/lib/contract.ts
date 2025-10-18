@@ -1,6 +1,6 @@
 // Contract configuration and network settings
 
-import { STACKS_TESTNET, STACKS_MAINNET, STACKS_DEVNET } from '@stacks/network';
+import { STACKS_TESTNET } from '@stacks/network';
 import type { StacksNetwork } from '@stacks/network';
 
 // Contract details

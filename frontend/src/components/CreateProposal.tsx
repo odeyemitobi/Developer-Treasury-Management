@@ -10,7 +10,7 @@ import { Select } from './ui/Select';
 import { Textarea } from './ui/Textarea';
 import { Modal } from './ui/Modal';
 import { EmptyState } from './ui/EmptyState';
-import { ROLES, PROPOSAL_TYPES } from '@/types/treasury';
+import { ROLES } from '@/types/treasury';
 import { stxToMicroStx, isValidStacksAddress } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 import { MdAdd, MdSend, MdPersonAdd, MdPersonRemove, MdSettings, MdDescription } from 'react-icons/md';
@@ -18,8 +18,8 @@ import { MdAdd, MdSend, MdPersonAdd, MdPersonRemove, MdSettings, MdDescription }
 type ProposalFormType = 'transfer' | 'add-member' | 'remove-member' | 'change-threshold';
 
 export function CreateProposal() {
-  const { address, userSession } = useWallet();
-  const contractWrite = useContractWrite(userSession);
+  const { address } = useWallet();
+  const contractWrite = useContractWrite();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [proposalType, setProposalType] = useState<ProposalFormType>('transfer');
   

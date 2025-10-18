@@ -109,7 +109,7 @@ export function MemberList() {
             <div className="flex-1 min-w-0 space-y-2">
               <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">Your Address</p>
               <p className="text-base sm:text-lg font-mono font-bold text-white truncate">
-                {shortenAddress(address, 6, 6)}
+                {shortenAddress(address, 6)}
               </p>
 
               {/* Role Badge */}

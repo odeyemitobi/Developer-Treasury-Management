@@ -10,9 +10,12 @@ import {
   PostConditionMode,
 } from '@stacks/transactions';
 import { CONTRACT_ADDRESS, CONTRACT_NAME, CONTRACT_FUNCTIONS, NETWORK } from '@/lib/contract';
-import { UserSession } from '@stacks/connect';
 
-export function useContractWrite(userSession: UserSession) {
+interface ContractCallData {
+  txId: string;
+}
+
+export function useContractWrite() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,15 +39,16 @@ export function useContractWrite(userSession: UserSession) {
         ],
         network: NETWORK,
         postConditionMode: PostConditionMode.Deny,
-        onFinish: (data) => {
+        onFinish: (data: ContractCallData) => {
           console.log('Transaction submitted:', data.txId);
         },
         onCancel: () => {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to propose transfer');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to propose transfer');
       console.error('Error proposing transfer:', err);
     } finally {
       setIsLoading(false);
@@ -71,15 +75,16 @@ export function useContractWrite(userSession: UserSession) {
         ],
         network: NETWORK,
         postConditionMode: PostConditionMode.Deny,
-        onFinish: (data) => {
+        onFinish: (data: ContractCallData) => {
           console.log('Transaction submitted:', data.txId);
         },
         onCancel: () => {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to propose add member');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to propose add member');
       console.error('Error proposing add member:', err);
     } finally {
       setIsLoading(false);
@@ -104,15 +109,16 @@ export function useContractWrite(userSession: UserSession) {
         ],
         network: NETWORK,
         postConditionMode: PostConditionMode.Deny,
-        onFinish: (data) => {
+        onFinish: (data: ContractCallData) => {
           console.log('Transaction submitted:', data.txId);
         },
         onCancel: () => {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to propose remove member');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to propose remove member');
       console.error('Error proposing remove member:', err);
     } finally {
       setIsLoading(false);
@@ -137,15 +143,16 @@ export function useContractWrite(userSession: UserSession) {
         ],
         network: NETWORK,
         postConditionMode: PostConditionMode.Deny,
-        onFinish: (data) => {
+        onFinish: (data: ContractCallData) => {
           console.log('Transaction submitted:', data.txId);
         },
         onCancel: () => {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to propose threshold change');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to propose threshold change');
       console.error('Error proposing threshold change:', err);
     } finally {
       setIsLoading(false);
@@ -167,15 +174,16 @@ export function useContractWrite(userSession: UserSession) {
         ],
         network: NETWORK,
         postConditionMode: PostConditionMode.Deny,
-        onFinish: (data) => {
+        onFinish: (data: ContractCallData) => {
           console.log('Transaction submitted:', data.txId);
         },
         onCancel: () => {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to vote on proposal');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to vote on proposal');
       console.error('Error voting on proposal:', err);
     } finally {
       setIsLoading(false);
@@ -194,15 +202,16 @@ export function useContractWrite(userSession: UserSession) {
         functionArgs: [uintCV(proposalId)],
         network: NETWORK,
         postConditionMode: PostConditionMode.Deny,
-        onFinish: (data) => {
+        onFinish: (data: ContractCallData) => {
           console.log('Transaction submitted:', data.txId);
         },
         onCancel: () => {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to execute transfer proposal');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to execute transfer proposal');
       console.error('Error executing transfer proposal:', err);
     } finally {
       setIsLoading(false);
@@ -221,15 +230,16 @@ export function useContractWrite(userSession: UserSession) {
         functionArgs: [uintCV(proposalId)],
         network: NETWORK,
         postConditionMode: PostConditionMode.Deny,
-        onFinish: (data) => {
+        onFinish: (data: ContractCallData) => {
           console.log('Transaction submitted:', data.txId);
         },
         onCancel: () => {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to execute add member proposal');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to execute add member proposal');
       console.error('Error executing add member proposal:', err);
     } finally {
       setIsLoading(false);
@@ -248,15 +258,16 @@ export function useContractWrite(userSession: UserSession) {
         functionArgs: [uintCV(proposalId)],
         network: NETWORK,
         postConditionMode: PostConditionMode.Deny,
-        onFinish: (data) => {
+        onFinish: (data: ContractCallData) => {
           console.log('Transaction submitted:', data.txId);
         },
         onCancel: () => {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to execute remove member proposal');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to execute remove member proposal');
       console.error('Error executing remove member proposal:', err);
     } finally {
       setIsLoading(false);
@@ -275,15 +286,16 @@ export function useContractWrite(userSession: UserSession) {
         functionArgs: [uintCV(proposalId)],
         network: NETWORK,
         postConditionMode: PostConditionMode.Deny,
-        onFinish: (data) => {
+        onFinish: (data: ContractCallData) => {
           console.log('Transaction submitted:', data.txId);
         },
         onCancel: () => {
           setError('Transaction cancelled');
         },
       });
-    } catch (err: any) {
-      setError(err.message || 'Failed to execute threshold proposal');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to execute threshold proposal');
       console.error('Error executing threshold proposal:', err);
     } finally {
       setIsLoading(false);

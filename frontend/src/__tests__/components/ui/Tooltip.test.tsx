@@ -5,7 +5,7 @@ import { Tooltip } from '@/components/ui/Tooltip';
 
 describe('Tooltip Component', () => {
   it('should render tooltip trigger', () => {
-    const { container } = render(
+    render(
       <Tooltip content="Tooltip content">
         <button>Hover me</button>
       </Tooltip>
@@ -24,7 +24,7 @@ describe('Tooltip Component', () => {
 
   it('should show tooltip on hover', async () => {
     const user = userEvent.setup();
-    const { container } = render(
+    render(
       <Tooltip content="Tooltip content">
         <button>Hover me</button>
       </Tooltip>
@@ -32,7 +32,7 @@ describe('Tooltip Component', () => {
     const button = screen.getByText('Hover me');
     await user.hover(button);
     // Tooltip should be visible after hover
-    expect(container).toBeInTheDocument();
+    expect(button).toBeInTheDocument();
   });
 
   it('should hide tooltip on unhover', async () => {

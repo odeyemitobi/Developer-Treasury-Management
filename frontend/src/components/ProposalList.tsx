@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useWallet } from '@/hooks/useWallet';
-import { useProposal, useProposalNonce } from '@/hooks/useTreasury';
+import { useProposalNonce } from '@/hooks/useTreasury';
 import { useContractWrite } from '@/hooks/useContractWrite';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
@@ -12,7 +12,7 @@ import { Spinner } from './ui/Spinner';
 import { EmptyState } from './ui/EmptyState';
 import { Proposal, PROPOSAL_TYPES, getProposalTypeName, getProposalTypeColor } from '@/types/treasury';
 import { formatStx, shortenAddress, canExecuteProposal } from '@/lib/utils';
-import { MdThumbUp, MdThumbDown, MdPlayArrow, MdRefresh, MdDescription, MdAccessTime } from 'react-icons/md';
+import { MdThumbUp, MdThumbDown, MdPlayArrow, MdRefresh, MdDescription } from 'react-icons/md';
 
 function ProposalCard({ proposal, onVote, onExecute, isLoading }: {
   proposal: Proposal;
@@ -79,7 +79,7 @@ function ProposalCard({ proposal, onVote, onExecute, isLoading }: {
             value={proposal.approvalCount}
             max={threshold}
             label="Approval Progress"
-            color={progressPercentage >= 100 ? 'green' : 'orange'}
+            color={progressPercentage >= 100 ? 'green' : 'amber'}
           />
         </div>
       )}
@@ -157,9 +157,9 @@ function ProposalCard({ proposal, onVote, onExecute, isLoading }: {
 }
 
 export function ProposalList() {
-  const { address, userSession } = useWallet();
+  const { address } = useWallet();
   const { nonce, refetch: refetchNonce } = useProposalNonce();
-  const contractWrite = useContractWrite(userSession);
+  const contractWrite = useContractWrite();
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [isLoadingProposals, setIsLoadingProposals] = useState(true);
 
@@ -248,7 +248,7 @@ export function ProposalList() {
           />
           <div className="p-4 bg-orange-500/10 border border-orange-500/30 rounded-xl">
             <p className="text-orange-300 text-sm leading-relaxed text-center">
-              💡 <strong>Get started:</strong> Use the "Create Proposal" section to submit your first treasury action
+              💡 <strong>Get started:</strong> Use the &quot;Create Proposal&quot; section to submit your first treasury action
             </p>
           </div>
         </div>

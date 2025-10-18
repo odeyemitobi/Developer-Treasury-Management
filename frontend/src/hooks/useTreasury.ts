@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { cvToJSON, hexToCV, fetchCallReadOnlyFunction } from '@stacks/transactions';
+import { cvToJSON, fetchCallReadOnlyFunction } from '@stacks/transactions';
 import { CONTRACT_ADDRESS, CONTRACT_NAME, CONTRACT_FUNCTIONS, NETWORK } from '@/lib/contract';
-import { TreasuryInfo, Member, Proposal } from '@/types/treasury';
+import { TreasuryInfo, Member, Proposal, Role, ProposalType } from '@/types/treasury';
 
 export function useTreasuryInfo() {
   const [treasuryInfo, setTreasuryInfo] = useState<TreasuryInfo | null>(null);
@@ -25,7 +25,7 @@ export function useTreasuryInfo() {
       });
 
       const data = cvToJSON(result);
-      
+
       if (data.value) {
         setTreasuryInfo({
           name: data.value.name.value,
@@ -35,8 +35,9 @@ export function useTreasuryInfo() {
           isInitialized: data.value['is-initialized'].value,
         });
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch treasury info');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to fetch treasury info');
       console.error('Error fetching treasury info:', err);
     } finally {
       setIsLoading(false);
@@ -77,19 +78,20 @@ export function useMemberInfo(address: string | null) {
       });
 
       const data = cvToJSON(result);
-      
+
       if (data.value) {
         setMemberInfo({
           address,
-          role: parseInt(data.value.role.value),
+          role: parseInt(data.value.role.value) as Role,
           joinedAt: parseInt(data.value['joined-at'].value),
           isActive: data.value['is-active'].value,
         });
       } else {
         setMemberInfo(null);
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch member info');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to fetch member info');
       console.error('Error fetching member info:', err);
     } finally {
       setIsLoading(false);
@@ -130,12 +132,12 @@ export function useProposal(proposalId: number | null) {
       });
 
       const data = cvToJSON(result);
-      
+
       if (data.value) {
         setProposal({
           proposalId,
           proposer: data.value.proposer.value,
-          proposalType: parseInt(data.value['proposal-type'].value),
+          proposalType: parseInt(data.value['proposal-type'].value) as ProposalType,
           target: data.value.target.value?.value,
           amount: data.value.amount.value ? BigInt(data.value.amount.value.value) : undefined,
           tokenContract: data.value['token-contract'].value?.value,
@@ -149,8 +151,9 @@ export function useProposal(proposalId: number | null) {
       } else {
         setProposal(null);
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch proposal');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to fetch proposal');
       console.error('Error fetching proposal:', err);
     } finally {
       setIsLoading(false);
@@ -185,8 +188,9 @@ export function useProposalNonce() {
 
       const data = cvToJSON(result);
       setNonce(parseInt(data.value));
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch proposal nonce');
+    } catch (err: unknown) {
+      const error = err as Error;
+      setError(error.message || 'Failed to fetch proposal nonce');
       console.error('Error fetching proposal nonce:', err);
     } finally {
       setIsLoading(false);

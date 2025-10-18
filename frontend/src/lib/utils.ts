@@ -172,10 +172,12 @@ export function isValidStacksAddress(address: string): boolean {
  * @param error Error object
  * @returns Error message
  */
-export function parseContractError(error: any): string {
+export function parseContractError(error: unknown): string {
   if (typeof error === 'string') return error;
-  if (error?.message) return error.message;
-  if (error?.toString) return error.toString();
+  if (error instanceof Error) return error.message;
+  if (error && typeof error === 'object' && 'toString' in error) {
+    return (error as { toString(): string }).toString();
+  }
   return 'An unknown error occurred';
 }
 

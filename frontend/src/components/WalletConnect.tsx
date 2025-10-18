@@ -42,7 +42,7 @@ export function WalletConnect() {
 
           {/* Address - Shorter on mobile */}
           <span className="text-white font-mono text-xs sm:text-sm font-medium tracking-tight">
-            {shortenAddress(address, 3, 3)}
+            {shortenAddress(address, 3)}
           </span>
 
           {/* Copy Button - Hidden on very small screens */}

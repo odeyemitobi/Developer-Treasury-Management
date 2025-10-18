@@ -49,7 +49,7 @@ describe('StatCard Component', () => {
   });
 
   it('should support icon prop', () => {
-    const { container } = render(
+    render(
       <StatCard label="Total Balance" value="1,000 STX" icon={<span>💰</span>} />
     );
     expect(screen.getByText('💰')).toBeInTheDocument();

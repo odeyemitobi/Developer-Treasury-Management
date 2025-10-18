@@ -4,10 +4,11 @@ import { CONTRACT_ADDRESS, CONTRACT_NAME, CONTRACT_FUNCTIONS, NETWORK } from '@/
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const proposalId = parseInt(params.id);
+    const { id } = await params;
+    const proposalId = parseInt(id);
 
     if (isNaN(proposalId) || proposalId < 1) {
       return NextResponse.json(
