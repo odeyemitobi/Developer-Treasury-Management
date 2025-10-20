@@ -1,12 +1,9 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // Set turbopack root to frontend directory to avoid lockfile conflicts
-  turbopack: {
-    root: path.resolve(__dirname),
-  },
+  // Vercel automatically sets outputFileTracingRoot for monorepos
+  // No need to set turbopack.root as it conflicts with Vercel's settings
+  output: 'standalone',
 };
 
 export default nextConfig;
