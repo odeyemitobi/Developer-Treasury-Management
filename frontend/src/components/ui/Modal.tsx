@@ -1,4 +1,5 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { MdClose } from 'react-icons/md';
 
@@ -11,6 +12,13 @@ interface ModalProps {
 }
 
 export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -22,7 +30,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
   const sizes = {
     sm: 'max-w-md',
@@ -31,8 +39,8 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
     xl: 'max-w-4xl',
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200">
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-200">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-md"
@@ -41,7 +49,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
 
       {/* Modal */}
       <div className={cn(
-        'relative bg-[#0a0a0a] border border-[#1a1a1a] rounded-2xl shadow-2xl w-full',
+        'relative bg-[#0a0a0a] border border-[#1a1a1a] rounded-2xl shadow-2xl w-full z-[10000]',
         'animate-in zoom-in-95 duration-200',
         sizes[size]
       )}>
@@ -67,5 +75,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
 
