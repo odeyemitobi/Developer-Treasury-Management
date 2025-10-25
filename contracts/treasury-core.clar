@@ -157,8 +157,9 @@
     ;; Ensure contract hasn't been initialized
     (asserts! (not (var-get is-initialized)) ERR_NOT_AUTHORIZED)
 
-    ;; Validate threshold
+    ;; Validate threshold (must be >= 1 and <= 1 since we start with 1 member)
     (asserts! (>= initial-threshold MIN_THRESHOLD) ERR_INVALID_THRESHOLD)
+    (asserts! (<= initial-threshold u1) ERR_INVALID_THRESHOLD)
 
     ;; Set treasury configuration
     (var-set treasury-name name)
@@ -468,17 +469,23 @@
       ;; Check sufficient approvals
       (asserts! (>= (get approval-count proposal) (var-get approval-threshold)) ERR_INSUFFICIENT_APPROVALS)
 
-      ;; Mark as executed
-      (map-set proposals
-        { proposal-id: proposal-id }
-        (merge proposal { executed: true })
-      )
-
       ;; Execute remove member
-      (let ((target-member (unwrap! (get target proposal) ERR_PROPOSAL_NOT_FOUND)))
+      (let (
+        (target-member (unwrap! (get target proposal) ERR_PROPOSAL_NOT_FOUND))
+        (new-member-count (- (var-get member-count) u1))
+      )
         (begin
+          ;; Ensure threshold won't exceed member count after removal
+          (asserts! (<= (var-get approval-threshold) new-member-count) ERR_INVALID_THRESHOLD)
+
+          ;; Mark as executed
+          (map-set proposals
+            { proposal-id: proposal-id }
+            (merge proposal { executed: true })
+          )
+
           (map-delete members { address: target-member })
-          (var-set member-count (- (var-get member-count) u1))
+          (var-set member-count new-member-count)
           (ok true)
         )
       )
@@ -498,15 +505,19 @@
       ;; Check sufficient approvals
       (asserts! (>= (get approval-count proposal) (var-get approval-threshold)) ERR_INSUFFICIENT_APPROVALS)
 
-      ;; Mark as executed
-      (map-set proposals
-        { proposal-id: proposal-id }
-        (merge proposal { executed: true })
-      )
-
       ;; Execute threshold change
       (let ((new-threshold (unwrap! (get new-threshold proposal) ERR_PROPOSAL_NOT_FOUND)))
         (begin
+          ;; Validate new threshold
+          (asserts! (>= new-threshold MIN_THRESHOLD) ERR_INVALID_THRESHOLD)
+          (asserts! (<= new-threshold (var-get member-count)) ERR_INVALID_THRESHOLD)
+
+          ;; Mark as executed
+          (map-set proposals
+            { proposal-id: proposal-id }
+            (merge proposal { executed: true })
+          )
+
           (var-set approval-threshold new-threshold)
           (ok true)
         )

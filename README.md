@@ -125,12 +125,39 @@ The system is designed with modularity in mind, starting with a core treasury co
 
 ## Testing
 
-The project includes comprehensive TypeScript tests using Clarinet:
+The project includes comprehensive testing at multiple levels:
+
+### Unit Tests (TypeScript)
+
+Run TypeScript unit tests using Clarinet:
 
 ```bash
 npm install
 npm test
 ```
+
+### Fuzz Testing (Rendezvous)
+
+Run property-based and invariant tests using Rendezvous:
+
+```bash
+# Run property-based tests
+npm run fuzz:test
+
+# Run invariant tests
+npm run fuzz:invariant
+
+# Run all fuzz tests
+npm run fuzz
+
+# Run extended fuzz tests (1000 iterations)
+npm run fuzz:extended
+
+# Run all tests (unit + fuzz)
+npm run test:all
+```
+
+For detailed information about fuzz testing, see [FUZZ_TESTING.md](./FUZZ_TESTING.md).
 
 Test coverage includes:
 
@@ -140,6 +167,8 @@ Test coverage includes:
 - Execution logic
 - Access control
 - Error handling
+- Property-based testing (random inputs)
+- Invariant validation (state consistency)
 
 ## Development Setup
 
